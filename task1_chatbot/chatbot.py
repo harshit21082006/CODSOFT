@@ -1,4 +1,3 @@
-# chatbot.py
 import json
 import random
 
@@ -6,12 +5,15 @@ import random
 with open("intents.json") as file:
     data = json.load(file)
 
-def get_response(msg):
-    msg = msg.lower()
+def get_response(user_input):
+    user_input = user_input.lower()  # Convert input to lowercase
+    
     for intent in data["intents"]:
         for pattern in intent["patterns"]:
-            if msg == pattern.lower():
+            pattern_lower = pattern.lower()
+            # Check if the pattern is anywhere in the user input
+            if pattern_lower in user_input:
                 return random.choice(intent["responses"])
-    # fallback response
-    fallback_intent = next((i for i in data["intents"] if i["tag"]=="fallback"), None)
-    return random.choice(fallback_intent["responses"]) if fallback_intent else "I don't understand."
+    
+    # Default response if nothing matches
+    return "Sorry, I didn't understand that. Can you rephrase?"

@@ -1,13 +1,22 @@
-# app.py
 import streamlit as st
 from chatbot import get_response
 
 st.set_page_config(page_title="CodSoft Chatbot", page_icon="🤖")
-st.title("🤖 CodSoft Chatbot")
+st.title("🤖 CodSoft Rule-Based Chatbot")
 
-st.markdown("Type a message below and get a response!")
+# Session state to store chat history
+if "history" not in st.session_state:
+    st.session_state.history = []
 
-user_input = st.text_input("You:")
+# User input
+user_input = st.text_input("You:", "")
+
 if user_input:
     response = get_response(user_input)
-    st.text_area("Chatbot:", value=response, height=100)
+    st.session_state.history.append({"user": user_input, "bot": response})
+
+# Display chat history
+for chat in st.session_state.history:
+    st.markdown(f"**You:** {chat['user']}")
+    st.markdown(f"**Bot:** {chat['bot']}")
+    st.markdown("---")
